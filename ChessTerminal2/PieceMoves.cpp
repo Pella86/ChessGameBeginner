@@ -253,7 +253,7 @@ void ChessMoves::fillcBoardKing(int row, int col){
 			}
 		}
 	}
-
+/*
     //arrocco o-o
     //if king is in d1 and has not moved yet (register of moves in Piece?)
     //e1 = row 7 and col 4
@@ -267,7 +267,7 @@ void ChessMoves::fillcBoardKing(int row, int col){
         }
     }
 
-
+*/
 
 }
 bool isInBoard(int rORc){
