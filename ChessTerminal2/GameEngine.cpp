@@ -10,24 +10,19 @@
 #include "GameEngine.h"
 
 
-
+//parser for the column 
 bool isStrColOK(std::string answer){
 	//recive the format 'a1'
-	bool isOK = true;
-	if (answer[0] < 'a' or answer[0] > 'h') { //check if column is right
-		isOK = false;
-	} 
-	return isOK;
+	if (answer[0] > 'a' or answer[0] < 'h') {return true;} 
+    else{return false;}
 }
 
+//parser for the rows
 bool isStrRowOK(std::string answer){
-	bool isOK = true;
 	int cInpDebug = answer[1];
 	cInpDebug -= 48; //to map the number between 1 and 8
-	if (cInpDebug < 1 or cInpDebug > 8) { //check if row is right
-		isOK = false;
-	}
-	return isOK;
+	if (cInpDebug > 1 or cInpDebug < 8) {return true;}
+    else{return false;}
 }
 
 
@@ -35,10 +30,12 @@ bool isStrRowOK(std::string answer){
 std::string HPlayer::selectUnit() const{
 	//takes an input fromt the player
 	std::string answer;
-	bool BADa = true;
+	bool BADa = true; //Bad answer flag
 	//parse the string:
 	do{
-		std::cout<< "Input a position:\n in the format (xy) x = column(letter), column y = row(number)"<<std::endl;
+		std::cout<< "Input a position:\n"<<
+            "in the format (xy) x = column(letter), column y = row(number)"<<
+            std::endl;
 		std::getline(std::cin, answer);
 		if (answer.length() != 2) { //check if size is right
 			std::cout << "The string is too long, try again"<< std::endl;
@@ -64,21 +61,27 @@ std::string HPlayer::selectUnit() const{
 
 std::string HPlayer::mkMove() const{
 	std::string answer;
-	bool BADa = true;
+	bool BADa = true; //bad Answer flag
+    //ask to input while the string is not correctly formatted
+    //no check for the rules performed here
+    //The rules are checked by the GE
+    //this is just a parser for the string inputted by the user
 	do {
-		std::cout<< "Input a movement:\n in the format (xy:xy)\n x = column(letter), column y = row(number): ";
+		std::cout<< "Input a movement, in the format (xy:xy)\n x = column(letter), y = row(number): ";
 
 		std::getline(std::cin, answer);
 		
 		if(answer == "q" ){
-			std::cout<< "THE END\n it was a plesure\n goodbye!"<<std::endl;
+			std::cout<< "THE END\n Thank you for playing\n goodbye!"<<std::endl;
 			exit(0);
 		}
 
+        //get the From position
 		std::stringstream ss;
 		ss << answer[0] << answer[1];
 		std::string from = ss.str();
 		
+        //get the row position
 		ss.str("");
 		ss << answer[3] << answer[4];
 		std::string to = ss.str();
@@ -91,10 +94,6 @@ std::string HPlayer::mkMove() const{
 			std::cout<< "from position not formatted correctly, try again"<<std::endl;
 			BADa = true;
 		}
-		else if (!isStrRowOK(to) or !isStrColOK(to)) {
-			std::cout<< "to position not formatted correctly, try again"<<std::endl;
-			BADa = true;			
-		}
 		else {
 			BADa = false;
 		}
@@ -104,14 +103,9 @@ std::string HPlayer::mkMove() const{
 }
 
 std::string HPlayer::printPlayer(){
+    //print the player
 	std::stringstream ss;
-	std::string colstr;
-	if (color == WHITE) {
-		colstr = "White";
-	}
-	else {
-		colstr = "Black";
-	}
+	std::string colstr= (color == WHITE)?"White":"Black";
 
 	ss<< "Human player " << colstr;
 	return ss.str();
@@ -120,43 +114,47 @@ std::string HPlayer::printPlayer(){
 
 
 std::string CPUPlayer::selectUnit() const{
-	std::string a = "a1";
-	std::cout<< "I'm in the CPU select unit"<<std::endl;
-	return a;
+	//function prototype
+    std::cerr<<"CPU Player not defined yet"<<std::endl;
+    exit(1);
 }
 std::string CPUPlayer::mkMove() const{
-	std::string b = "a1:b1";
-	std::cout<< "I'm in the CPU mkMove"<<std::endl;
-	return b;
+	//function prototype
+    std::cerr<<"CPU Player not defined yet"<<std::endl;
+    exit(1);
 }
 
 
 std::string CPUPlayer::printPlayer(){
 	std::stringstream ss;
-	std::string colstr;
-	if (color == WHITE) {
-		colstr = "White";
-	}
-	else {
-		colstr = "Black";
-	}
+	std::string colstr = (color == WHITE)?"White":"Black";
 	
 	ss<< "CPU player " << colstr;
 	return ss.str();
 }
 
+
+
+/************
+ * GameEngine
+ ***********/
+
 void GEngine::setPlayers(){
+    //Given:  Nothing
+    //Task:   Parse user input for human or CPU
+    //Return: Nothing but instanciate two new player
 	std::string answer;
-	bool BADa = true;
+	bool BADa = true; //Bad answer flag
+    //set Player 1
 	do {
-		std::cout<<"player1 is white and is CPU or Human?"<<std::endl;
+		std::cout<<"player1 is white and is CPU or Human? ";
 		std::getline(std::cin, answer);
 		if (answer == "h" or answer == "human") {
 			p1 = new HPlayer(WHITE);
 			BADa = false;
 		}
-		else if(answer == "pc" or answer == "c" or answer == "cpu"
-				or answer == "CPU"){
+		else if(answer == "pc" or answer == "c" or
+                answer == "cpu"	or answer == "CPU"){
 			p1 = new CPUPlayer(WHITE);
 			BADa = false;
 		}
@@ -164,8 +162,9 @@ void GEngine::setPlayers(){
 			BADa = true;
 		}
 	} while (BADa);
-	do {
-		std::cout<<"player2 is black and is CPU or Human?"<<std::endl;
+	//set Player 2
+    do {
+		std::cout<<"player2 is black and is CPU or Human? ";
 		std::getline(std::cin, answer);
 		if (answer == "h" or answer == "human") {
 			p2 = new HPlayer(BLACK);
@@ -183,9 +182,10 @@ void GEngine::setPlayers(){
 	
 }
 
-
+//constructor
+//  initialize the board
+//  pass it as a reference to che checkBoard
 GEngine::GEngine():board(),checkBoard(board){
-	checkBoard.printcBoard();
 	setPlayers();
 }
 
@@ -208,11 +208,10 @@ void GEngine::gameLoop(){
 			move = p1->mkMove();
 		}while (!isValidMove(move, p1));
 		board.movePiece(move);
-		//reset move
-		board.printBoard();
 		
 		//ask move p2
 		move = "invalid";
+		board.printBoard();
 		do {
 			std::cout<< "Player 2 ";
 			move = p2->mkMove();
@@ -229,10 +228,13 @@ bool GEngine::isValidMove(std::string mv, Player* p){
 	//get the from to..
 	
 	bool isValid = true;
+
+    //get the from position
 	std::stringstream ss;
 	ss << mv[0]<< mv[1];
 	std::string from = ss.str();
 	
+    //get the to position
 	ss.str("");
 	ss<< mv[3]<< mv[4];
 	std::string to = ss.str();
@@ -242,6 +244,7 @@ bool GEngine::isValidMove(std::string mv, Player* p){
 		std::cout<<"Invalid move: Position "<< from << " empty"<<std::endl;
 		return isValid = false;
 	}
+
 	//check if the piece is the right color
 	if (board.getPieceAt(from).getColor() != p->getColor() ) {
 		std::cout<<"Invalid move: Picked "<< from <<" piece with wrong color"<<std::endl;
@@ -253,6 +256,7 @@ bool GEngine::isValidMove(std::string mv, Player* p){
 		std::cout << "Invalid move: Positon "<< to <<" already occupied by a piece of the same color"<<std::endl;
 		return isValid = false;
 	}
+
 	//check if piece can move there
 	checkBoard.fillcBoard(from);
 	if(checkBoard.get(to) == canPASS or checkBoard.get(to) == canEAT){
