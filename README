@@ -1,9 +1,21 @@
 Chess:
 
+-|--a-|--b-|--c-|--d-|--e-|--f-|--g-|--h-|
+8|-bR-|+bk+|-bB-|+bQ+|-bK-|+bB+|-bk-|+bR+|
+7|+bP+|-bP-|+bP+|-bP-|+bP+|-bP-|+bP+|-bP-|
+6|----|+--+|----|+--+|----|+--+|----|+--+|
+5|+--+|----|+--+|----|+--+|----|+--+|----|
+4|----|+--+|----|+--+|----|+--+|----|+--+|
+3|+--+|----|+--+|----|+--+|----|+--+|----|
+2|-wP-|+wP+|-wP-|+wP+|-wP-|+wP+|-wP-|+wP+|
+1|+wR+|-wk-|+wB+|-wQ-|+wK+|-wB-|+wk+|-wR-|
+ 
 This is a little chess game played from terminal:
 - is still a work in progress
 - The first thing the program asks is if the player are human or cpu
 - (The cpu still does not work)
 - Then the program asks the moves for player1
 - which can be inputted as the classical chess moves
+
+
 
